@@ -44,6 +44,15 @@ module.exports = function (buffer, how, cb) {
 
 	//TODO: somewhere here goes rate mapping, volume and detune
 
+	// Do volume
+	let b = new AudioBuffer(null, {
+		numberOfChannels: buffer.numberOfChannels,
+		length: buffer.length,
+		sampleRate: buffer.sampleRate
+	});
+	for( let channel = 0; channel < buffer.numberOfChannels; ++channel )
+		b.getChannelData(channel).set(buffer.getChannelData(channel).map(v => v*how.volume));
+	buffer = b;
 
 	let read = AudioSource(buffer, {
 		loop: how.loop
